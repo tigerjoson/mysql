@@ -1,0 +1,9 @@
+	SELECT count(*),資產編號 FROM disk_official_document.degaussing2200 de2200 group by de2200.資產編號 order by 資產編號 asc;
+	SELECT count(*),casenumber FROM disk_official_document.tiis2200 tiis group by tiis.casenumber;
+	with 
+	de2200  as( SELECT count(*) as de2200_count ,資產編號 FROM disk_official_document.degaussing2200 group by 資產編號),
+	tiis as ( SELECT count(*) as tiis_count , casenumber FROM disk_official_document.tiis2200 group by casenumber)
+	select de2200.de2200_count ,de2200.資產編號,tiis.casenumber,tiis.tiis_count from de2200
+	inner join tiis
+	on de2200.資產編號 = tiis.casenumber
+	where de2200.de2200_count <> tiis.tiis_count;
