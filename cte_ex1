@@ -1,0 +1,39 @@
+use 消磁機;
+show tables;
+select * from 消磁專案主表 ;
+select * from 消磁專案明細;  
+describe 消磁專案主表;
+describe 消磁專案明細;
+/*消磁專案名稱*/
+/*select  @sn:=@sn+1,
+pt.消磁專案名稱, pt.專案建立日期, detail.Prj_ID, detail.List_ID,detail.品牌, detail.SN序號, detail.財產編號,detail.消磁完成, detail.操作人員, detail.操作時間,detail.Total_Count
+from 消磁專案主表 pt  inner join  消磁專案明count(*),細 detail on pt.Prj_ID = detail.Prj_ID
+where 操作人員 = '陳子武' group by pt.消磁專案名稱;*/
+/*count 消磁專案名稱*/  
+set @sn :=0;
+/*CTE*/
+
+/*1. 創一個ourtable cte*/
+with ourtable as(
+select pt.Prj_ID,detail.List_ID , @sn:=@sn+1 as item, pt.消磁專案名稱, pt.專案建立日期,detail.品牌, detail.SN序號, detail.財產編號,detail.消磁完成, detail.操作人員, detail.操作時間
+from 消磁專案主表 pt  inner join 消磁專案明細 detail on pt.Prj_ID = detail.Prj_ID
+where 消磁專案名稱 like '%20220012-1' order by List_ID)
+/*2. join*/
+select * from ourtable o  inner join 機型 s
+on  s.機號 = o.財產編號 ;
+  
+set @sn :=0;
+select pt.Prj_ID,detail.List_ID , @sn:=@sn+1 as item, pt.消磁專案名稱, pt.專案建立日期,detail.品牌, detail.SN序號, detail.財產編號,detail.消磁完成, detail.操作人員, detail.操作時間
+from 消磁專案主表 pt  inner join 消磁專案明細 detail on pt.Prj_ID = detail.Prj_ID
+where  year(pt.專案建立日期) >=2022 and month(pt.專案建立日期) >="10" and  detail.財產編號 like 'pc07vw%'  order by List_ID;
+
+/*SN序號*/
+set @sn:=0;
+select @sn:=@sn+1, pt.消磁專案名稱, pt.專案建立日期, detail.Prj_ID, detail.List_ID,detail.品牌, detail.SN序號, detail.財產編號,detail.消磁完成, detail.操作人員, detail.操作時間,detail.Total_Count
+from 消磁專案主表 pt  inner join  消磁專案明細 detail  
+on pt.Prj_ID = detail.Prj_ID where SN序號 like "%";
+
+select count(*) as priority ,pt.消磁專案名稱, pt.專案建立日期, detail.Prj_ID, detail.List_ID,detail.品牌, detail.SN序號, detail.財產編號, detail.操作人員, detail.操作時間
+from 消磁專案主表 pt  inner join  消磁專案明細 detail on pt.Prj_ID = detail.Prj_ID
+where  pt.專案建立日期 between date('2022-10-05') and date('2022-10-07')
+ group by pt.消磁專案名稱 order by priority desc;
