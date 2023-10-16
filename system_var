@@ -1,0 +1,4 @@
+SELECT USER();
+ SELECT VERSION();
+ set global local_infile =on;
+ set  sql_safe_updates = 0;
