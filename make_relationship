@@ -1,3 +1,4 @@
+--ref https://www.w3schools.com/sql/sql_foreignkey.asp
 --make relationship during create table
 CREATE TABLE Orders (
     OrderID int NOT NULL,
@@ -6,4 +7,6 @@ CREATE TABLE Orders (
     PRIMARY KEY (OrderID),
     FOREIGN KEY (PersonID) REFERENCES Persons(PersonID)
 );
---
+--make relationship with ALTER TABLE
+ALTER TABLE Orders
+ADD FOREIGN KEY (PersonID) REFERENCES Persons(PersonID);
